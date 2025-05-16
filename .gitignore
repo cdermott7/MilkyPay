@@ -1,0 +1,6 @@
+node_modules/
+.env
+*.pem
+*.log
+new-clean-repo
+frontend/temp-app
