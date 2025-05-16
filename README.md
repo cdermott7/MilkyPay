@@ -30,7 +30,7 @@ MilkyPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool th
 
 ## Demo Video
 
-[![MilkyPay Demo Video](https://img.youtube.com/vi/-HJDbgt1tE/0.jpg)](https://youtu.be/-HJDbgt1tEA)
+[![MilkyPay Demo Video](https://img.youtube.com/vi/-HJDbgt1tEA/0.jpg)](https://www.youtube.com/watch?v=-HJDbgt1tEA&ab_channel=ColderGames9.5)
 
 *Click the image above to watch the full demo of MilkyPay in action.*
 
