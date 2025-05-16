@@ -30,11 +30,23 @@ MilkyPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool th
 
 ## Demo Video
 
-[![MilkyPay Demo Video](https://img.youtube.com/vi/PLACEHOLDER_VIDEO_ID/0.jpg)](https://youtu.be/PLACEHOLDER_VIDEO_ID)
+[![MilkyPay Demo Video](https://img.youtube.com/vi/-HJDbgt1tE/0.jpg)](https://youtu.be/-HJDbgt1tEA)
 
 *Click the image above to watch the full demo of MilkyPay in action.*
 
 > This comprehensive demo showcases how MilkyPay leverages Stellar's features for secure cross-border payments with voice commands, link sharing, and PIN authentication.
+
+[![MilkyPay Presentation Video](https://img.youtube.com/vi/8jddUsZT8Dw/0.jpg)](https://youtu.be/8jddUsZT8Dw)
+
+*Click the image above to watch us explore the potential of MilkyPay.*
+
+> This comprehensive presentation explains how MilkyPay is the best possible payment solution one can achieve in Web3 for seamless UX.
+
+[![MilkyPay Short Demo Video](https://img.youtube.com/vi/uFc6qQFs-qo/0.jpg)](https://youtu.be/uFc6qQFs-qo)
+
+*Click the image above to watch a short demo video of MilkyPay's features.*
+
+> This is a short demo showing off MilkyPay's main feature.
 
 ## Key Features
 
