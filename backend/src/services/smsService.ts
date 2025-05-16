@@ -1,4 +1,5 @@
-import twilio from 'twilio';
+// @ts-ignore
+import * as twilio from 'twilio';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -17,13 +18,14 @@ console.log('From Number exists:', !!fromNumber);
 console.log('Account SID starts with AC:', accountSid?.startsWith('AC'));
 
 // Initialize Twilio client if credentials are available
-let twilioClient = null;
+let twilioClient: any = null;
 try {
-  if (accountSid && authToken) {
+  if (accountSid && authToken && accountSid.startsWith('AC')) {
+    // @ts-ignore
     twilioClient = twilio(accountSid, authToken);
     console.log('Twilio client initialized successfully');
   } else {
-    console.log('Twilio client not initialized due to missing credentials');
+    console.log('Twilio client not initialized due to missing credentials or invalid format');
   }
 } catch (error) {
   console.error('Failed to initialize Twilio client:', error);
