@@ -1,0 +1,106 @@
+{
+  "id": "escrow_policy",
+  "name": "Escrow Contract Policy",
+  "description": "Pre-flight and post-flight rules for our Soroban escrow contract, including jurisdiction checks",
+  "version": "1.1.0",
+
+  "rules": [
+    // 1. Jurisdiction Compliance: only allow users in US, CA or EU
+    {
+      "id": "jurisdiction_check",
+      "name": "Jurisdiction Compliance",
+      "description": "Reject escrow creations from disallowed jurisdictions",
+      "trigger": "preflight",
+      "event": "create_escrow",
+      "conditions": [
+        {
+          "left": {
+            "function": "getUserJurisdiction",
+            "args": [ { "param": "sender" } ]
+          },
+          "op": "not_in",
+          "right": { "const": ["US", "CA", "EU"] }
+        }
+      ],
+      "action": {
+        "type": "reject",
+        "params": {
+          "message": "Your jurisdiction is not permitted to create escrows"
+        }
+      }
+    },
+
+    // 2. Maximum Escrow Amount
+    {
+      "id": "max_amount",
+      "name": "Maximum Escrow Amount",
+      "description": "Disallow escrow creations above 500 XLM",
+      "trigger": "preflight",
+      "event": "create_escrow",
+      "conditions": [
+        {
+          "left": { "param": "amount" },
+          "op": ">",
+          "right": { "const": 500 }
+        }
+      ],
+      "action": {
+        "type": "reject",
+        "params": {
+          "message": "Amount exceeds maximum of 500 XLM"
+        }
+      }
+    },
+
+    // 3. KYC Level Gate
+    {
+      "id": "kyc_gate",
+      "name": "KYC Level Check",
+      "description": "Only allow KYC-verified users to create escrows",
+      "trigger": "preflight",
+      "event": "create_escrow",
+      "conditions": [
+        {
+          "left": {
+            "function": "getUserKycLevel",
+            "args": [ { "param": "sender" } ]
+          },
+          "op": "<",
+          "right": { "const": 1 }
+        }
+      ],
+      "action": {
+        "type": "reject",
+        "params": {
+          "message": "User must have KYC level ≥ 1"
+        }
+      }
+    },
+
+    // 4. Brute-force Lockout → Auto-refund after 3 bad PIN attempts
+    {
+      "id": "brute_force_lockout",
+      "name": "Auto-refund After 3 Failed PIN Attempts",
+      "description": "When 3 EscrowAttemptFailed events occur for the same payment_id within 1 hour, auto-refund",
+      "trigger": "event",
+      "event": "EscrowAttemptFailed",
+      "aggregate": {
+        "group_by": [ "data.payment_id" ],
+        "window": "PT1H",
+        "count": 3
+      },
+      "action": {
+        "type": "invoke_onchain",
+        "params": {
+          "chain": "stellar:testnet",
+          "contract": "CBCO2BHCAAZZ2DCVJ4CZ4G6T3WHTRFZNP3RYAQAI6CRDF6BBMO3UZKFG",
+          "method": "refund_escrow",
+          "args": [
+            { "left": { "data": "user" } },
+            { "left": { "data": "payment_id" } }
+          ]
+        }
+      }
+    }
+  ]
+}
