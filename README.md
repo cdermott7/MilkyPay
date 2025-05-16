@@ -59,29 +59,102 @@ MilkyPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool th
 
 ## Screenshots
 
-### Home Screen & Wallet
-![MilkyPay Home Screen](./assets/screenshots/home_screen.png)
-*The main dashboard showing available balance in USD, XLM, and FTN with quick action buttons*
+### Home Screen – Dark Mode  
+![MilkyPay Base Dark Mode](./assets/screenshots/MilkyPayBaseDarkMode.png)  
+*Dark-mode dashboard showing USD, XLM, and FTN balances with quick-action buttons for Deposit, Purchase, Transfer, and Withdraw.*
 
-### Voice AI Assistant
-![MilkyPay Voice Assistant](./assets/screenshots/voice_assistant.png)
-*The AI assistant interface, showing a transcription of voice commands and responses*
+### Home Screen Variant – Dark Mode  
+![MilkyPay Base Dark Mode 2](./assets/screenshots/MilkyPayBaseDarkMode2.png)  
+*Alternate dark-mode dashboard view highlighting expanded wallet details and recent transactions.*
 
-### Send Money Flow
-![Send Money Flow](./assets/screenshots/send_money.png)
-*Intuitive money transfer flow with recipient, amount, and optional memo*
+### Home Screen – Light Mode  
+![MilkyPay Base Light Mode](./assets/screenshots/MilkyPayBaseLightmode.png)  
+*Light-mode dashboard displaying USD, XLM, and FTN balances with the same quick-action buttons.*
 
-### Claim Link Interface
-![Claim Link Interface](./assets/screenshots/claim_link.png)
-*Recipient's claim interface with secure PIN entry and verification*
+### Claim Funds Interface  
+![MilkyPay Claim Funds Screen](./assets/screenshots/MilkyPayClaimFundsScreen.png)  
+*Secure claim screen where recipients enter a PIN to verify and claim funds sent via link.*
 
-### Transaction History
-![Transaction History](./assets/screenshots/transaction_history.png)
-*Detailed transaction history showing payments, claims, and optional memos*
+### Deposit Flow – Light Mode  
+![MilkyPay Deposit Light Mode](./assets/screenshots/MilkyPayDepositLightMode.png)  
+*Light-mode deposit interface prompting users to select an asset and enter the amount.*
 
-### Settings Screen
-![Settings Screen](./assets/screenshots/settings.png)
-*User settings with theme toggle and wallet backup options*
+### Deposit Confirmation – Light Mode  
+![MilkyPay Deposit Light Mode 2](./assets/screenshots/MilkyPayDepositLightMode2.png)  
+*Light-mode deposit confirmation showing amount, network fees, and Confirm button.*
+
+### Loading Animation  
+![MilkyPay Load Animation Screen](./assets/screenshots/MilkyPayLoadAnimationScreen.png)  
+*Animated loader displayed while transactions or data are being processed.*
+
+### Off-Ramp Flow  
+![MilkyPay Offramp Screen](./assets/screenshots/MilkyPayOfframpScreen.png)  
+*Interface for converting crypto to fiat, showing available rails and fees.*
+
+### Profile – Dark Mode  
+![MilkyPay Profile Dark Mode](./assets/screenshots/MilkyPayProfileDarkMode.png)  
+*Dark-mode profile screen with user info, theme toggle, and wallet backup options.*
+
+### Profile – Light Mode  
+![MilkyPay Profile Light Mode](./assets/screenshots/MilkyPayProfileLightMode.png)  
+*Light-mode profile interface displaying user settings and security features.*
+
+### Purchase Flow – Dark Mode  
+![MilkyPay Purchase Dark Mode](./assets/screenshots/MilkyPayPurchaseDarkMode.png)  
+*Dark-mode purchase screen allowing users to buy FTN or XLM with real-time rate quotes.*
+
+### Purchase Flow – Light Mode  
+![MilkyPay Purchase Light Mode](./assets/screenshots/MilkyPayPurchaseLightMode.png)  
+*Light-mode purchase interface with input fields for amount, currency selector, and order summary.*
+
+### Recurring Payments – Dark Mode  
+![MilkyPay Recurring Payment Dark Mode](./assets/screenshots/MilkyPayRecurringPaymentDarkMode.png)  
+*Dark-mode view for scheduling and managing recurring payments or subscriptions.*
+
+### Recurring Payments – Light Mode  
+![MilkyPay Recurring Payment Light Mode](./assets/screenshots/MilkyPayRecurringPaymentLightMode.png)  
+*Light-mode interface for setting up automated, recurring transfers.*
+
+### SMS Example  
+![MilkyPay SMS Example](./assets/screenshots/MilkyPaySMSExample.png)  
+*Illustration of SMS notification sent to a recipient with a secure claim link.*
+
+### Settings – Dark Mode  
+![MilkyPay Settings Dark Mode](./assets/screenshots/MilkyPaySettingsDarkMode.png)  
+*Dark-mode settings screen with privacy, security, and notification preferences.*
+
+### Settings – Light Mode  
+![MilkyPay Settings Light Mode](./assets/screenshots/MilkyPaySettingsLightMode.png)  
+*Light-mode settings interface showing configurable options and toggles.*
+
+### Transaction Animation  
+![MilkyPay Transaction Animation](./assets/screenshots/MilkyPayTransactionAnimation.png)  
+*Visual feedback animation displayed when a transaction is successfully sent.*
+
+### Transaction History – Dark Mode  
+![MilkyPay Transaction History Dark Mode](./assets/screenshots/MilkyPayTransactionHistoryDarkMode.png)  
+*Dark-mode history view listing past payments, claims, and memos with timestamps.*
+
+### Transaction History – Light Mode  
+![MilkyPay Transaction History Light Mode](./assets/screenshots/MilkyPayTransactionHistoryLightMode.png)  
+*Light-mode transaction log showing detailed history of all account activity.*
+
+### Transfer Flow – Dark Mode  
+![MilkyPay Transfer Dark Mode](./assets/screenshots/MilkyPayTransferDarkMode.png)  
+*Dark-mode send-money flow with recipient entry, amount input, and optional memo.*
+
+### Transfer Flow – Light Mode  
+![MilkyPay Transfer Light Mode](./assets/screenshots/MilkyPayTransferLightMode.png)  
+*Light-mode transfer interface featuring contact picker, amount field, and memo.*
+
+### Withdraw Flow – Dark Mode  
+![MilkyPay Withdraw Dark Mode](./assets/screenshots/MilkyPayWithdrawDarkMode.png)  
+*Dark-mode withdrawal screen for moving funds out, showing destination network and fees.*
+
+### Withdraw Flow – Light Mode  
+![MilkyPay Withdraw Light Mode](./assets/screenshots/MilkyPayWithdrawLightMode.png)  
+*Light-mode withdraw interface with destination address, amount input, and Confirm button.*
+
 
 ## Technical Architecture
 
