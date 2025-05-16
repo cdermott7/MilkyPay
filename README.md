@@ -393,7 +393,7 @@ MilkyPay leverages several key Stellar features:
 This combination of features makes MilkyPay uniquely positioned in the remittance space - offering a voice-first, user-friendly interface that abstracts away blockchain complexity while leveraging Stellar's speed, low fees, and global reach.
 
 ### Canva Slides Presentation
-- [Presentation Slides](https://www.canva.com/design/PLACEHOLDER_CANVA_ID/view)
+- [Presentation Slides](https://www.canva.com/design/DAGnnBhWj0s/8PjVPO7r6JrhTPeXTqSINQ/edit?utm_content=DAGnnBhWj0s&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 ## License
 
