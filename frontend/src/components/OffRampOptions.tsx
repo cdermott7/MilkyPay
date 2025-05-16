@@ -32,6 +32,8 @@ interface OffRampOption {
 interface OffRampOptionsProps {
   balance?: string;
   walletAddress?: string;
+  isTemporaryWallet?: boolean;
+  isTemporaryMode?: boolean; // For the dedicated claim page
   onWithdraw?: (amount: string, method: string, details: any) => Promise<any>;
   onSuccess?: (result: any) => void;
   className?: string;
@@ -259,6 +261,8 @@ const ReferenceCode = styled.div`
 const OffRampOptions: React.FC<OffRampOptionsProps> = ({
   balance = '0',
   walletAddress,
+  isTemporaryWallet = false,
+  isTemporaryMode = false, // For the dedicated claim page
   onWithdraw,
   onSuccess,
   className,
@@ -604,7 +608,17 @@ const OffRampOptions: React.FC<OffRampOptionsProps> = ({
             variant="primary"
             fullWidth
             leftIcon={<FiArrowRight />}
-            onClick={() => window.location.href = '/wallet'}
+            onClick={() => {
+              // For temp wallets, we want to redirect to the main application
+              // For regular wallets, we go back to the wallet
+              if (isTemporaryWallet) {
+                // Clear temporary wallet data
+                localStorage.removeItem('temp_wallet');
+                window.location.href = '/';
+              } else {
+                window.location.href = '/wallet';
+              }
+            }}
           >
             Return to Wallet
           </Button>
@@ -617,14 +631,20 @@ const OffRampOptions: React.FC<OffRampOptionsProps> = ({
   return (
     <OptionsContainer className={className}>
       <CardHeader 
-        title="Withdraw Funds" 
-        subtitle="Convert your digital assets to local currency"
+        title={isTemporaryMode ? "Claim Your Funds" : "Withdraw Funds"} 
+        subtitle={isTemporaryMode 
+          ? "Convert your claimed funds to local currency" 
+          : "Convert your digital assets to local currency"
+        }
       />
       
       <CardContent>
         <BalanceInfo>
           <BalanceLabel>Available Balance</BalanceLabel>
-          <BalanceAmount>${parseFloat(balance).toFixed(2)} USD</BalanceAmount>
+          <BalanceAmount>
+            ${parseFloat(balance).toFixed(2)} USD 
+            {!isTemporaryWallet && ` (${(parseFloat(balance) / 0.15).toFixed(7)} XLM)`}
+          </BalanceAmount>
         </BalanceInfo>
         
         <h3 style={{ 
@@ -716,9 +736,10 @@ const OffRampOptions: React.FC<OffRampOptionsProps> = ({
                 isLoading={isLoading}
                 disabled={!selectedOption || !amount || parseFloat(amount) <= 0 || isLoading}
               >
-                Withdraw Funds
+                {isTemporaryMode ? "Claim Your Funds" : "Withdraw Funds"}
               </Button>
             </WithdrawForm>
+            
           </>
         )}
       </CardContent>

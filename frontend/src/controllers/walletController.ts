@@ -1,5 +1,9 @@
 import { Request, Response } from 'express';
-import StellarSdk, { Keypair, Server } from 'stellar-sdk';
+import * as StellarSdk from 'stellar-sdk';
+import { Keypair } from 'stellar-sdk';
+// Fix Server import by creating type alias
+type Server = StellarSdk.Horizon.Server; 
+const Server = StellarSdk.Horizon.Server;
 
 // Config
 const HORIZON_URL = process.env.HORIZON_URL || 'https://horizon-testnet.stellar.org';

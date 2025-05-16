@@ -61,7 +61,14 @@ const RightIconContainer = styled.div`
 `;
 
 // Base input styles
-const StyledInput = styled.input<Pick<TextInputProps, 'size' | 'variant'> & { hasError?: boolean; hasLeftIcon?: boolean; hasRightIcon?: boolean }>`
+// Basic styled input without size prop conflicts
+const StyledInput = styled.input<{ 
+  variant?: 'outlined' | 'filled' | 'underlined'; 
+  hasError?: boolean; 
+  hasLeftIcon?: boolean; 
+  hasRightIcon?: boolean; 
+  inputSize?: 'sm' | 'md' | 'lg';
+}>`
   width: 100%;
   font-family: ${theme.typography.fontFamily.secondary};
   border-radius: ${theme.borderRadius.lg};
@@ -82,34 +89,36 @@ const StyledInput = styled.input<Pick<TextInputProps, 'size' | 'variant'> & { ha
   }
   
   /* Size variants */
-  ${props => {
-    switch (props.size) {
-      case 'sm':
-        return css`
-          font-size: ${theme.typography.fontSize.sm};
-          padding: ${theme.spacing[1]} ${theme.spacing[3]};
-          height: 2.25rem; /* 36px */
-          ${props.hasLeftIcon && css`padding-left: ${theme.spacing[8]};`}
-          ${props.hasRightIcon && css`padding-right: ${theme.spacing[8]};`}
-        `;
-      case 'lg':
-        return css`
-          font-size: ${theme.typography.fontSize.md};
-          padding: ${theme.spacing[3]} ${theme.spacing[4]};
-          height: 3.25rem; /* 52px */
-          ${props.hasLeftIcon && css`padding-left: ${theme.spacing[10]};`}
-          ${props.hasRightIcon && css`padding-right: ${theme.spacing[10]};`}
-        `;
-      case 'md':
-      default:
-        return css`
-          font-size: ${theme.typography.fontSize.base};
-          padding: ${theme.spacing[2]} ${theme.spacing[4]};
-          height: 2.75rem; /* 44px */
-          ${props.hasLeftIcon && css`padding-left: ${theme.spacing[10]};`}
-          ${props.hasRightIcon && css`padding-right: ${theme.spacing[10]};`}
-        `;
+  ${(props) => {
+    // Use inputSize prop instead
+    if (props.inputSize === 'sm') {
+      return css`
+        font-size: ${theme.typography.fontSize.sm};
+        padding: ${theme.spacing[1]} ${theme.spacing[3]};
+        height: 2.25rem; /* 36px */
+        ${props.hasLeftIcon && css`padding-left: ${theme.spacing[8]};`}
+        ${props.hasRightIcon && css`padding-right: ${theme.spacing[8]};`}
+      `;
     }
+    
+    if (props.inputSize === 'lg') {
+      return css`
+        font-size: ${theme.typography.fontSize.md};
+        padding: ${theme.spacing[3]} ${theme.spacing[4]};
+        height: 3.25rem; /* 52px */
+        ${props.hasLeftIcon && css`padding-left: ${theme.spacing[10]};`}
+        ${props.hasRightIcon && css`padding-right: ${theme.spacing[10]};`}
+      `;
+    }
+    
+    // Default - 'md' or anything else
+    return css`
+      font-size: ${theme.typography.fontSize.base};
+      padding: ${theme.spacing[2]} ${theme.spacing[4]};
+      height: 2.75rem; /* 44px */
+      ${props.hasLeftIcon && css`padding-left: ${theme.spacing[10]};`}
+      ${props.hasRightIcon && css`padding-right: ${theme.spacing[10]};`}
+    `;
   }}
   
   /* Style variants */
@@ -275,7 +284,8 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
             hasLeftIcon={!!leftIcon}
             hasRightIcon={!!effectiveRightIcon}
             variant={variant}
-            size={size}
+            // Pass the size value as inputSize
+            inputSize={size}
             value={value}
             onFocus={handleFocus}
             onBlur={handleBlur}

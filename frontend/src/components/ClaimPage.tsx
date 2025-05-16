@@ -210,16 +210,54 @@ const ClaimPage: React.FC<ClaimPageProps> = ({ claimId, onComplete }) => {
       // Call the wallet's claim function
       const result = await claimBalance(claimId, pin);
       
-      if (result.success) {
-        setClaimedAmount(result.amount);
+      // Type guard to check if result exists and has the expected properties
+      if (result && 'amount' in result) {
+        // Log the claim result for debugging
+        console.log('Claim result:', result);
+        
+        // Make sure we have an amount (either USD or XLM)
+        let amountValue = result.amount;
+        
+        // Convert XLM to USD if needed
+        if (result.assetType === 'native' && !amountValue.toString().startsWith('$')) {
+          // Handle possible XLM amount in result
+          const xlmAmount = parseFloat(amountValue);
+          // If it's not a very small number, it's likely XLM and needs conversion
+          if (xlmAmount > 1) {
+            const usdAmount = (xlmAmount * 0.15).toFixed(2);
+            amountValue = usdAmount;
+            console.log(`Converted ${xlmAmount} XLM to $${usdAmount} USD`);
+          }
+        }
+        
+        // Store the amount without $ prefix
+        const numericAmount = amountValue.toString().replace('$', '');
+        setClaimedAmount(numericAmount);
         setStatus(ClaimStatus.SUCCESS);
         
-        // After a delay, navigate back to home
+        // Create a temporary wallet object in localStorage
+        const tempWallet = {
+          isTemporary: true,
+          balance: numericAmount,
+          xlmBalance: result.xlmAmount || (parseFloat(numericAmount) / 0.15).toFixed(7),
+          claimId,
+          createdAt: new Date().toISOString()
+        };
+        
+        console.log('Saving temporary wallet with data:', tempWallet);
+        localStorage.setItem('temp_wallet', JSON.stringify(tempWallet));
+        
+        // After a delay, navigate to the dedicated claim funds page
         setTimeout(() => {
-          onComplete();
-        }, 5000);
+          // Go to the dedicated "Claim Your Funds" page
+          window.location.href = '/claim-funds?amount=' + numericAmount;
+          if (onComplete) onComplete();
+        }, 3000);
       } else {
-        setErrorMessage(result.error || 'Failed to claim funds');
+        const errorMsg = result && 'error' in (result as any) 
+          ? (result as any).error 
+          : 'Failed to claim funds';
+        setErrorMessage(errorMsg);
         setStatus(ClaimStatus.ERROR);
       }
     } catch (error) {
@@ -302,7 +340,7 @@ const ClaimPage: React.FC<ClaimPageProps> = ({ claimId, onComplete }) => {
           >
             <FiCheck size={24} style={{ marginBottom: '8px' }} />
             <StatusMessage>
-              Success! {claimedAmount} XLM has been added to your wallet.
+              Success! ${parseFloat(claimedAmount).toFixed(2)} USD has been claimed. You'll now be redirected to withdraw these funds.
             </StatusMessage>
           </SuccessStatus>
         )}

@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import theme, { darkTheme } from '../../styles/theme';
 import Card from '../ui/Card';
 import { FiArrowUp, FiArrowDown, FiRefreshCw, FiSettings, FiUser, FiClock, FiDollarSign } from 'react-icons/fi';
-import { FaRocket, FaSatellite, FaSpaceShuttle, FaGlobe, FaCoins, FaExchangeAlt, FaWallet, FaHistory, FaUserAstronaut, FaCog } from 'react-icons/fa';
+import { FaRocket, FaSatellite, FaSpaceShuttle, FaGlobe, FaCoins, FaExchangeAlt, FaWallet, FaHistory, FaUserAstronaut, FaCog, FaCalendarAlt } from 'react-icons/fa';
 import SimpleThemeToggle from '../ui/SimpleThemeToggle';
 import ChatWidget from '../ChatWidget';
 
@@ -440,6 +440,13 @@ const HomeScreen: React.FC<HomeScreenProps> = ({
               <FaHistory />
             </QuickActionIcon>
             <QuickActionLabel>History</QuickActionLabel>
+          </QuickActionButton>
+          
+          <QuickActionButton onClick={() => onNavigate('recurring')}>
+            <QuickActionIcon>
+              <FaCalendarAlt />
+            </QuickActionIcon>
+            <QuickActionLabel>Recurring</QuickActionLabel>
           </QuickActionButton>
           
           <QuickActionButton onClick={() => onNavigate('profile')}>

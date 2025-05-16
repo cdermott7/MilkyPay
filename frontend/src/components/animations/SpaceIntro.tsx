@@ -1,8 +1,9 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
 import theme from '../../styles/theme';
-import { ReactComponent as StellarLogoSVG } from '../../assets/stellar-logo.svg';
+// Import the Stellar logo image
+import stellarLogo from '../../assets/images/StellarLogo.png';
 
 interface SpaceIntroProps {
   onComplete: () => void;
@@ -56,7 +57,7 @@ const Star = styled.div<{ size: number; delay: number; speed: number }>`
   }
 `;
 
-const StellarLogo = styled(motion.div)`
+const LogoContainer = styled(motion.div)`
   position: relative;
   z-index: 10;
   width: 150px;
@@ -143,10 +144,10 @@ const SpaceIntro: React.FC<SpaceIntroProps> = ({ onComplete }) => {
     setStars(starElements);
     
     // Trigger the onComplete callback after the animation
-    // Extended animation time for a better experience
+    // Reduced animation time for faster loading
     const timer = setTimeout(() => {
       onComplete();
-    }, 5000);
+    }, 1500);
     
     return () => clearTimeout(timer);
   }, [onComplete]);
@@ -161,7 +162,7 @@ const SpaceIntro: React.FC<SpaceIntroProps> = ({ onComplete }) => {
       >
         <StarField>{stars}</StarField>
         
-        <StellarLogo
+        <LogoContainer
           initial={{ scale: 0.2, opacity: 0 }}
           animate={{ 
             scale: [0.2, 1.2, 1],
@@ -171,13 +172,13 @@ const SpaceIntro: React.FC<SpaceIntroProps> = ({ onComplete }) => {
           transition={{ 
             duration: 2,
             times: [0, 0.6, 1],
-            ease: "easeOut"
+            ease: [0.25, 0.1, 0.25, 1] // Fixed cubic-bezier instead of named easing
           }}
         >
           <LogoInner>
-            <StellarLogoSVG />
+            <img src={stellarLogo} alt="Stellar Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
           </LogoInner>
-        </StellarLogo>
+        </LogoContainer>
         
         <BrandText
           initial={{ opacity: 0, y: 20 }}

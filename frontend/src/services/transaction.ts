@@ -43,7 +43,7 @@ export const sendPhoneTransfer = async (
     
     if (!smsResult.success) {
       // SMS failed, but transaction succeeded
-      toast.warning('Transaction successful, but SMS notification failed to send');
+      toast.error('Transaction successful, but SMS notification failed to send');
       console.error('SMS notification failed:', smsResult.error);
       
       // Return the successful transaction with a warning flag

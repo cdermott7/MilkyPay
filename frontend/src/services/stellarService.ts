@@ -1,4 +1,8 @@
-import { Keypair, Server, Networks, Operation, TransactionBuilder, Asset } from 'stellar-sdk';
+import * as StellarSdk from 'stellar-sdk';
+import { Keypair, Networks, Operation, TransactionBuilder, Asset, Claimant } from 'stellar-sdk';
+// Fix Server import by creating type alias
+type Server = StellarSdk.Horizon.Server; 
+const Server = StellarSdk.Horizon.Server;
 
 // Initialize Stellar server
 const horizonUrl = process.env.STELLAR_HORIZON_URL || 'https://horizon-testnet.stellar.org';
@@ -82,18 +86,14 @@ export const buildPaymentTx = async (
           asset,
           amount,
           claimants: [
-            {
+            new Claimant(
               destination,
-              predicate: { unconditional: true }
-            },
-            {
-              // Add the sender as a claimant for potential refund
-              destination: keypair.publicKey(),
-              predicate: {
-                // Can claim back after 1 day (for demo purposes)
-                relBefore: '86400'
-              }
-            }
+              StellarSdk.Claimant.predicateUnconditional()
+            ),
+            new Claimant(
+              keypair.publicKey(),
+              StellarSdk.Claimant.predicateBeforeRelativeTime("86400")
+            )
           ]
         })
       )

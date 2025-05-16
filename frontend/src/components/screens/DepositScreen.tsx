@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiArrowLeft, FiCopy, FiCheckCircle, FiActivity } from 'react-icons/fi';
-import QRCode from 'qrcode.react';
+import { QRCodeSVG } from 'qrcode.react';
 import theme from '../../styles/theme';
 
 interface DepositScreenProps {
@@ -232,21 +232,11 @@ const DepositScreen: React.FC<DepositScreenProps> = ({ walletAddress, onBack }) 
           
           <StyledQRCode>
             <QRContainer>
-              <QRCode 
+              <QRCodeSVG 
                 value={walletAddress} 
                 size={180} 
                 level="H"
-                renderAs="svg"
                 includeMargin={true}
-                // Remove imageSettings which has type errors
-                // imageSettings={{
-                //   src: 'https://stellarx.com/static/images/stellar.svg',
-                //   x: null,
-                //   y: null,
-                //   height: 30,
-                //   width: 30,
-                //   excavate: true,
-                // }}
               />
             </QRContainer>
           </StyledQRCode>
