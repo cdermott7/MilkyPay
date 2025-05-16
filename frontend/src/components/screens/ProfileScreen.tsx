@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
 import { FiArrowLeft, FiEdit2, FiCopy, FiCheckCircle, FiShield, FiLock, FiSmartphone, FiAlertCircle } from 'react-icons/fi';
-import { FaUserAstronaut } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 
 interface ProfileScreenProps {
   walletAddress?: string;
@@ -254,7 +254,7 @@ const ProfileScreen: React.FC<ProfileScreenProps> = ({
       
       <ProfileSection>
         <Avatar>
-          <FaUserAstronaut size={40} />
+          <FaIcons.FaUserAstronaut size={40} />
           <EditButton>
             <FiEdit2 size={16} />
           </EditButton>

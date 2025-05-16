@@ -33,6 +33,7 @@ interface ChatWidgetProps {
   onOffRamp?: (amount: string, method: string) => Promise<void>;
   onRefund?: (txId: string) => Promise<void>;
   walletBalance?: string;
+  walletFtnBalance?: string;
   walletAddress?: string;
   className?: string;
   fallbackVoiceInput?: (currentInput: string) => Promise<string>;
@@ -375,6 +376,7 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
   onOffRamp,
   onRefund,
   walletBalance,
+  walletFtnBalance,
   walletAddress,
   className,
   fallbackVoiceInput,
@@ -554,10 +556,25 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
       
       // Special handling for balance check intent
       if (nlpResult.intent === 'check_balance') {
-        // Create a balance response message
-        const balanceResponse = walletBalance 
-          ? `Your current balance is ${walletBalance} XLM, approximately $${(parseFloat(walletBalance) * 0.15).toFixed(2)} USD.`
-          : `Your current balance information is not available right now.`;
+        // Create a balance response message (showing both USD and XLM)
+        // Using conversion rate of 1 XLM = $0.15 USD
+        const xlmBalance = parseFloat(walletBalance || '0');
+        const usdBalance = (xlmBalance * 0.15).toFixed(2);
+        const ftnBalance = parseFloat(walletFtnBalance || '0');
+        
+        let balanceResponse;
+        if (walletBalance) {
+          balanceResponse = `Your current balance is ${xlmBalance.toFixed(7)} XLM (approximately $${usdBalance} USD)`;
+          
+          // Add FTN balance if it exists and is not zero
+          if (walletFtnBalance && ftnBalance > 0) {
+            balanceResponse += ` and ${ftnBalance.toFixed(2)} FTN tokens.`;
+          } else {
+            balanceResponse += '.';
+          }
+        } else {
+          balanceResponse = `Your current balance information is not available right now.`;
+        }
         
         // Add response message
         setMessages(prevMessages => [
@@ -630,11 +647,22 @@ const ChatWidget: React.FC<ChatWidgetProps> = ({
           speak(processingMessage);
           
           try {
-            // Perform the action
-            await onSendMoney(amount, recipient);
+            // Perform the action (memos are handled in the transfer screen, not here)
+            const result = await onSendMoney(amount, recipient);
             
-            // Add confirmation
-            const confirmationText = `Success! I've sent ${amount} to ${recipient}. They'll receive a notification with instructions to claim the funds.`;
+            // Ensure the recipient is displayed in full (for cases where there might be hyphens)
+            console.log("Confirming money sent to recipient:", recipient);
+            
+            // Format amount to show $ if not already present
+            const displayAmount = amount.startsWith('$') ? amount : `$${amount}`;
+            
+            // Calculate XLM equivalent for display 
+            const usdAmount = parseFloat(amount.startsWith('$') ? amount.substring(1) : amount);
+            const xlmAmount = (usdAmount / 0.15).toFixed(7);
+            
+            // Create confirmation text with proper formatting (memos are handled in transfer screen, not chat)
+            const confirmationText = `Success! I've sent ${displayAmount} USD (${xlmAmount} XLM) to ${recipient}. They'll receive a notification with instructions to claim the funds.`;
+            
             setMessages(prevMessages => [
               ...prevMessages,
               {

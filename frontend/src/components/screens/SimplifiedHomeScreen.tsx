@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
-import { FaRocket, FaArrowUp, FaExchangeAlt, FaCoins, FaHistory, FaUserAstronaut, FaCog } from 'react-icons/fa';
+import * as FaIcons from 'react-icons/fa';
 import { FiSun, FiMoon } from 'react-icons/fi';
 import ChatWidget from '../ChatWidget';
 
 // Simple styled components (with fewer theme properties that could cause errors)
-const Container = styled.div`
+const Container = styled.div<{ isDark?: boolean }>`
   padding: 20px;
   width: 100%;
   max-width: 480px;
@@ -13,7 +13,7 @@ const Container = styled.div`
   display: flex;
   flex-direction: column;
   margin: 0 auto;
-  color: #333;
+  color: ${props => props.isDark ? 'white' : '#333'};
 
   @media (max-width: 768px) {
     padding: 10px;
@@ -29,15 +29,16 @@ const Header = styled.div`
 
 const GreetingContainer = styled.div``;
 
-const Greeting = styled.h2`
+const Greeting = styled.h2<{ isDark?: boolean }>`
   font-size: 24px;
   font-weight: 600;
   margin-bottom: 5px;
+  color: ${props => props.isDark ? 'white' : 'inherit'};
 `;
 
-const SubGreeting = styled.p`
+const SubGreeting = styled.p<{ isDark?: boolean }>`
   font-size: 14px;
-  color: #666;
+  color: ${props => props.isDark ? 'rgba(255, 255, 255, 0.7)' : '#666'};
   margin: 0;
 `;
 
@@ -97,10 +98,10 @@ const USDValue = styled.div`
   opacity: 0.7;
 `;
 
-const SectionTitle = styled.h3`
+const SectionTitle = styled.h3<{ isDark?: boolean }>`
   font-size: 18px;
   font-weight: 500;
-  color: #333;
+  color: ${props => props.isDark ? 'white' : '#333'};
   margin-bottom: 15px;
   margin-top: 20px;
 `;
@@ -117,17 +118,19 @@ const ActionButtonsContainer = styled.div`
   }
 `;
 
-const ActionButton = styled.button`
+const ActionButton = styled.button<{ isDark?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: white;
-  border: 1px solid #eee;
+  background: ${props => props.isDark ? 'rgba(255, 255, 255, 0.05)' : 'white'};
+  border: 1px solid ${props => props.isDark ? 'rgba(124, 58, 237, 0.3)' : '#eee'};
   border-radius: 12px;
   padding: 15px 10px;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
   cursor: pointer;
   transition: all 0.2s ease;
+  color: ${props => props.isDark ? 'white' : 'inherit'};
+  backdrop-filter: ${props => props.isDark ? 'blur(10px)' : 'none'};
   
   &:hover {
     transform: translateY(-3px);
@@ -135,21 +138,22 @@ const ActionButton = styled.button`
   }
 `;
 
-const IconWrapper = styled.div`
+const IconWrapper = styled.div<{ isDark?: boolean }>`
   width: 50px;
   height: 50px;
   border-radius: 50%;
-  background-color: #f3f4f6;
+  background-color: ${props => props.isDark ? 'rgba(124, 58, 237, 0.2)' : '#f3f4f6'};
   display: flex;
   align-items: center;
   justify-content: center;
   margin-bottom: 10px;
-  color: #7C3AED;
+  color: ${props => props.isDark ? 'white' : '#7C3AED'};
+  box-shadow: ${props => props.isDark ? '0 0 10px rgba(124, 58, 237, 0.3)' : 'none'};
 `;
 
-const ActionLabel = styled.span`
+const ActionLabel = styled.span<{ isDark?: boolean }>`
   font-weight: 500;
-  color: #333;
+  color: ${props => props.isDark ? 'white' : '#333'};
   font-size: 14px;
 `;
 
@@ -176,19 +180,22 @@ const QuickActionButtons = styled.div`
   gap: 12px;
 `;
 
-const QuickActionButton = styled.button`
+const QuickActionButton = styled.button<{ isDark?: boolean }>`
   display: flex;
   flex-direction: column;
   align-items: center;
-  background: transparent;
-  border: 1px solid #eee;
+  background: ${props => props.isDark ? 'rgba(255, 255, 255, 0.03)' : 'transparent'};
+  border: 1px solid ${props => props.isDark ? 'rgba(124, 58, 237, 0.2)' : '#eee'};
   border-radius: 12px;
   padding: 12px;
   flex: 1;
   cursor: pointer;
   
   &:hover {
-    background: #f9f9f9;
+    background: ${props => props.isDark ? 'rgba(124, 58, 237, 0.1)' : '#f9f9f9'};
+    border-color: ${props => props.isDark ? 'rgba(124, 58, 237, 0.4)' : '#eee'};
+    box-shadow: ${props => props.isDark ? '0 0 15px rgba(124, 58, 237, 0.2)' : 'none'};
+    transform: ${props => props.isDark ? 'translateY(-2px)' : 'none'};
   }
 `;
 
@@ -205,6 +212,7 @@ const QuickActionLabel = styled.span`
 
 interface SimplifiedHomeScreenProps {
   balance: string;
+  ftnBalance?: string;
   username?: string;
   walletAddress?: string;
   onNavigate: (screen: string) => void;
@@ -215,6 +223,7 @@ interface SimplifiedHomeScreenProps {
 
 const SimplifiedHomeScreen: React.FC<SimplifiedHomeScreenProps> = ({
   balance,
+  ftnBalance = '0',
   username = 'there',
   walletAddress = '',
   onNavigate,
@@ -222,16 +231,19 @@ const SimplifiedHomeScreen: React.FC<SimplifiedHomeScreenProps> = ({
   isDarkMode = false,
   onToggleTheme = () => {}
 }) => {
-  // Convert balance for display
+  // For display, we'll keep both USD and XLM
   const numericBalance = parseFloat(balance) || 0;
-  const usdValue = (numericBalance * 0.15).toFixed(2); // Assuming 1 XLM = $0.15 USD
+  // XLM is the native balance we have from the wallet
+  const xlmValue = numericBalance.toFixed(7); // Full XLM precision
+  // Convert XLM to USD (using 1 XLM = $0.15 USD as a sample rate)
+  const usdValue = (numericBalance * 0.15).toFixed(2);
   
   return (
-    <Container>
+    <Container isDark={isDarkMode}>
       <Header>
         <GreetingContainer>
-          <Greeting>Hello, {username}</Greeting>
-          <SubGreeting>Welcome back to MilkyPay</SubGreeting>
+          <Greeting isDark={isDarkMode}>Hello, {username}</Greeting>
+          <SubGreeting isDark={isDarkMode}>Welcome back to MilkyPay</SubGreeting>
         </GreetingContainer>
         <ThemeToggle onClick={onToggleTheme}>
           {isDarkMode ? <FiMoon size={20} /> : <FiSun size={20} />}
@@ -243,46 +255,49 @@ const SimplifiedHomeScreen: React.FC<SimplifiedHomeScreenProps> = ({
         <BalanceAmount>
           <CurrencySymbol>$</CurrencySymbol>
           {usdValue}
-          <XLMLabel>{numericBalance.toFixed(2)} XLM</XLMLabel>
+          <XLMLabel>USD</XLMLabel>
         </BalanceAmount>
-        <USDValue>Stellar Network · Self-Custodial</USDValue>
+        <USDValue>{xlmValue} XLM · Stellar Network</USDValue>
+        <USDValue>{ftnBalance} FTN · Bahamut Network</USDValue>
+        <USDValue style={{ fontSize: '12px', marginTop: '5px' }}>Self-Custodial Wallet</USDValue>
       </BalanceCard>
       
-      <SectionTitle>Actions</SectionTitle>
+      <SectionTitle isDark={isDarkMode}>Actions</SectionTitle>
       <ActionButtonsContainer>
-        <ActionButton onClick={() => onNavigate('deposit')}>
-          <IconWrapper>
-            <FaRocket size={20} />
+        <ActionButton onClick={() => onNavigate('deposit')} isDark={isDarkMode}>
+          <IconWrapper isDark={isDarkMode}>
+            <FaIcons.FaRocket size={20} />
           </IconWrapper>
-          <ActionLabel>Deposit</ActionLabel>
+          <ActionLabel isDark={isDarkMode}>Deposit</ActionLabel>
         </ActionButton>
         
-        <ActionButton onClick={() => onNavigate('withdraw')}>
-          <IconWrapper>
-            <FaArrowUp size={20} />
+        <ActionButton onClick={() => onNavigate('withdraw')} isDark={isDarkMode}>
+          <IconWrapper isDark={isDarkMode}>
+            <FaIcons.FaArrowUp size={20} />
           </IconWrapper>
-          <ActionLabel>Withdraw</ActionLabel>
+          <ActionLabel isDark={isDarkMode}>Withdraw</ActionLabel>
         </ActionButton>
         
-        <ActionButton onClick={() => onNavigate('transfer')}>
-          <IconWrapper>
-            <FaExchangeAlt size={20} />
+        <ActionButton onClick={() => onNavigate('transfer')} isDark={isDarkMode}>
+          <IconWrapper isDark={isDarkMode}>
+            <FaIcons.FaExchangeAlt size={20} />
           </IconWrapper>
-          <ActionLabel>Transfer</ActionLabel>
+          <ActionLabel isDark={isDarkMode}>Transfer</ActionLabel>
         </ActionButton>
         
-        <ActionButton onClick={() => onNavigate('purchase')}>
-          <IconWrapper>
-            <FaCoins size={20} />
+        <ActionButton onClick={() => onNavigate('purchase')} isDark={isDarkMode}>
+          <IconWrapper isDark={isDarkMode}>
+            <FaIcons.FaCoins size={20} />
           </IconWrapper>
-          <ActionLabel>Purchase</ActionLabel>
+          <ActionLabel isDark={isDarkMode}>Purchase</ActionLabel>
         </ActionButton>
       </ActionButtonsContainer>
       
-      <SectionTitle>AI Assistant</SectionTitle>
+      <SectionTitle isDark={isDarkMode}>AI Assistant</SectionTitle>
       <ChatSection>
         <ChatWidget
           walletBalance={balance}
+          walletFtnBalance={ftnBalance}
           walletAddress={walletAddress}
           onSendMoney={onSendMoney}
           fallbackVoiceInput={input => {
@@ -297,25 +312,32 @@ const SimplifiedHomeScreen: React.FC<SimplifiedHomeScreenProps> = ({
       <Divider />
       
       <QuickActionsContainer>
-        <SectionTitle>Quick Access</SectionTitle>
+        <SectionTitle isDark={isDarkMode}>Quick Access</SectionTitle>
         <QuickActionButtons>
-          <QuickActionButton onClick={() => onNavigate('history')}>
+          <QuickActionButton onClick={() => onNavigate('history')} isDark={isDarkMode}>
             <QuickActionIcon>
-              <FaHistory />
+              <FaIcons.FaHistory />
             </QuickActionIcon>
             <QuickActionLabel>History</QuickActionLabel>
           </QuickActionButton>
           
-          <QuickActionButton onClick={() => onNavigate('profile')}>
+          <QuickActionButton onClick={() => onNavigate('recurring')} isDark={isDarkMode}>
             <QuickActionIcon>
-              <FaUserAstronaut />
+              <FaIcons.FaCalendarAlt />
+            </QuickActionIcon>
+            <QuickActionLabel>Recurring</QuickActionLabel>
+          </QuickActionButton>
+          
+          <QuickActionButton onClick={() => onNavigate('profile')} isDark={isDarkMode}>
+            <QuickActionIcon>
+              <FaIcons.FaUserAstronaut />
             </QuickActionIcon>
             <QuickActionLabel>Profile</QuickActionLabel>
           </QuickActionButton>
           
-          <QuickActionButton onClick={() => onNavigate('settings')}>
+          <QuickActionButton onClick={() => onNavigate('settings')} isDark={isDarkMode}>
             <QuickActionIcon>
-              <FaCog />
+              <FaIcons.FaCog />
             </QuickActionIcon>
             <QuickActionLabel>Settings</QuickActionLabel>
           </QuickActionButton>

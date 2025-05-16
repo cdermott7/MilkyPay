@@ -16,8 +16,11 @@ console.log('Auth Token exists:', !!authToken);
 console.log('From Number exists:', !!fromNumber);
 console.log('Account SID starts with AC:', accountSid?.startsWith('AC'));
 
-// Initialize Twilio client if credentials are available
-let twilioClient = null;
+// Add type for Twilio client
+type TwilioClient = ReturnType<typeof twilio> | null;
+
+// Initialize Twilio client if credentials are available 
+let twilioClient: TwilioClient = null;
 try {
   if (accountSid && authToken) {
     twilioClient = twilio(accountSid, authToken);

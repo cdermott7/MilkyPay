@@ -28,6 +28,7 @@ import SimplifiedHistoryScreen from './components/screens/SimplifiedHistoryScree
 import ProfileScreen from './components/screens/ProfileScreen';
 import SimplifiedProfileScreen from './components/screens/SimplifiedProfileScreen';
 import SettingsScreen from './components/screens/SettingsScreen';
+import RecurringPaymentsScreen from './components/screens/RecurringPaymentsScreen';
 import SimplifiedSettingsScreen from './components/screens/SimplifiedSettingsScreen';
 
 // Hooks
@@ -66,6 +67,7 @@ const App: React.FC = () => {
   const [currentScreen, setCurrentScreen] = useState<string>('');
   const [walletAddress, setWalletAddress] = useState<string | null>(null);
   const [localBalance, setLocalBalance] = useState<string>('0');
+  const [localFtnBalance, setLocalFtnBalance] = useState<string>('0');
   const [isTransactionProcessing, setIsTransactionProcessing] = useState<boolean>(false);
   const [isTransactionSuccess, setIsTransactionSuccess] = useState<boolean>(false);
   
@@ -73,6 +75,7 @@ const App: React.FC = () => {
   const { 
     wallet, 
     balance, 
+    ftnBalance,
     isLoading: walletLoading, 
     createWallet, 
     sendPayment,
@@ -89,12 +92,31 @@ const App: React.FC = () => {
     setIsDarkMode(!isDarkMode);
   };
   
-  // Update local balance when wallet balance changes
+  // Update local balances when wallet balances change
   useEffect(() => {
     if (balance) {
       setLocalBalance(balance);
+      console.log("Local XLM balance updated from wallet:", balance);
     }
   }, [balance]);
+  
+  // Update local FTN balance when wallet FTN balance changes
+  useEffect(() => {
+    if (ftnBalance) {
+      setLocalFtnBalance(ftnBalance);
+      console.log("Local FTN balance updated from wallet:", ftnBalance);
+    }
+  }, [ftnBalance]);
+  
+  // Refresh balance when returning to home screen
+  useEffect(() => {
+    if (currentScreen === 'home' && wallet && !walletLoading) {
+      console.log("Home screen active, refreshing balance");
+      refreshBalance().catch(err => {
+        console.error("Error refreshing balance on home screen:", err);
+      });
+    }
+  }, [currentScreen, wallet, walletLoading, refreshBalance]);
   
   // Set wallet address when wallet is loaded
   useEffect(() => {
@@ -129,12 +151,22 @@ const App: React.FC = () => {
       setIsTransactionProcessing(true);
       setIsTransactionSuccess(false);
       
+      // Force balance refresh before transaction to ensure we have the latest
+      try {
+        console.log("Pre-transaction balance refresh...");
+        await refreshBalance();
+      } catch (preError) {
+        console.error("Error in pre-transaction balance refresh:", preError);
+      }
+      
       // Generate a random 4-digit PIN
       const pin = Math.floor(1000 + Math.random() * 9000).toString();
       console.log('Created PIN:', pin, 'for transfer to:', recipient);
       
       // For demo purposes, try the real operation but have a fallback mock
       let result;
+      let transactionSuccessful = false;
+      
       try {
         // First try real Stellar claimable balance operation
         result = await createClaimableBalance(
@@ -144,29 +176,60 @@ const App: React.FC = () => {
           30 // Expiration in days
         );
         console.log('Successfully created claimable balance:', result);
+        transactionSuccessful = true;
       } catch (stellarErr) {
         console.error('Error creating real claimable balance:', stellarErr);
         
-        // Create a mock result for demo purposes
-        console.log('Using mock result for demo...');
-        result = {
-          txHash: 'mock-tx-' + Date.now(),
-          balanceId: 'mock-balance-id-' + Date.now(),
-          amount: amount.startsWith('$') ? amount.substring(1) : amount,
-          pin,
-          recipient,
-          expirationDate: new Date(Date.now() + 30*24*60*60*1000).toISOString()
-        };
+        // Only use mock in demo mode
+        const isDemoMode = true; // You could have a real flag for this
+        
+        if (isDemoMode) {
+          // Create a mock result for demo purposes
+          console.log('Using mock result for demo...');
+          result = {
+            txHash: 'mock-tx-' + Date.now(),
+            balanceId: 'mock-balance-id-' + Date.now() + '-' + pin,
+            amount: amount.startsWith('$') ? amount.substring(1) : amount,
+            pin,
+            recipient,
+            expirationDate: new Date(Date.now() + 30*24*60*60*1000).toISOString()
+          };
+          transactionSuccessful = true;
+        } else {
+          // In production, would show error
+          const errorMessage = stellarErr instanceof Error ? stellarErr.message : 'Unknown error';
+          toast.error('Transaction failed: ' + errorMessage);
+          setIsTransactionSuccess(false);
+          setIsTransactionProcessing(false);
+          return null;
+        }
       }
       
-      // Simulate balance update
-      if (localBalance) {
-        const currentBalance = parseFloat(localBalance);
-        const sentAmount = parseFloat(amount.startsWith('$') ? amount.substring(1) : amount);
-        const newBalance = Math.max(0, currentBalance - sentAmount).toFixed(7);
+      // Only proceed if transaction was successful
+      if (transactionSuccessful) {
+        // Double refresh balance to ensure it's updated
+        // First immediate refresh
+        try {
+          console.log("First post-transaction balance refresh...");
+          await refreshBalance();
+        } catch (error) {
+          console.error("Failed first balance refresh after transaction:", error);
+        }
         
-        // Update the local balance to reflect the transaction
-        setLocalBalance(newBalance);
+        // Second delayed refresh for network propagation
+        setTimeout(async () => {
+          try {
+            console.log("Second (delayed) post-transaction balance refresh...");
+            await refreshBalance();
+          } catch (delayedError) {
+            console.error("Failed delayed balance refresh:", delayedError);
+          }
+        }, 2000);
+      } else {
+        console.warn("Transaction wasn't successful, not updating balance");
+        setIsTransactionSuccess(false);
+        setIsTransactionProcessing(false);
+        return null;
       }
       
       // Set transaction as successful and show animation
@@ -231,22 +294,25 @@ const App: React.FC = () => {
   const handleWithdraw = async (address: string, amount: string) => {
     try {
       console.log(`Withdrawing ${amount} to address: ${address}`);
+      setIsTransactionProcessing(true);
+      setIsTransactionSuccess(true);
       
       // Simulate a transaction for the demo
-      setTimeout(() => {
-        // Update the balance
-        if (localBalance) {
-          const currentBalance = parseFloat(localBalance);
-          const withdrawAmount = parseFloat(amount);
-          const newBalance = Math.max(0, currentBalance - withdrawAmount).toFixed(7);
-          setLocalBalance(newBalance);
+      setTimeout(async () => {
+        // Refresh balance from network instead of manual calculation
+        try {
+          console.log("Refreshing balance from network after withdraw...");
+          await refreshBalance();
+        } catch (error) {
+          console.error("Failed to refresh balance after withdraw:", error);
         }
         
         // Navigate back to home
         setCurrentScreen('home');
+        setIsTransactionProcessing(false);
         
         // Show success message
-        toast.success(`Successfully withdrew ${amount} XLM to ${address.slice(0, 6)}...${address.slice(-6)}`);
+        toast.success(`Successfully withdrew $${parseFloat(amount).toFixed(2)} USD to ${address.slice(0, 6)}...${address.slice(-6)}`);
       }, 1500);
       
       return {
@@ -257,6 +323,7 @@ const App: React.FC = () => {
       };
     } catch (err) {
       console.error('Withdrawal error:', err);
+      setIsTransactionSuccess(false);
       toast.error('Failed to withdraw funds');
       return {
         success: false,
@@ -289,12 +356,12 @@ const App: React.FC = () => {
           claimDate: new Date().toISOString()
         };
         
-        // Simulate balance increase
-        if (localBalance) {
-          const currentBalance = parseFloat(localBalance);
-          const claimedAmount = 100; // Mock amount
-          const newBalance = (currentBalance + claimedAmount).toFixed(7);
-          setLocalBalance(newBalance);
+        // Refresh balance from network instead of manual calculation
+        try {
+          console.log("Refreshing balance from network after claim...");
+          await refreshBalance();
+        } catch (error) {
+          console.error("Failed to refresh balance after claim:", error);
         }
       }
       
@@ -395,6 +462,7 @@ const App: React.FC = () => {
                 >
                   <SimplifiedHomeScreen 
                     balance={localBalance}
+                    ftnBalance={localFtnBalance}
                     username="there"
                     onNavigate={navigateTo}
                     onSendMoney={handleChatSend}
@@ -497,6 +565,23 @@ const App: React.FC = () => {
                     onBack={() => navigateTo('home')} 
                     isDarkMode={isDarkMode} 
                     onToggleTheme={toggleTheme} 
+                  />
+                </ScreenContainer>
+              )}
+              
+              {currentScreen === 'recurring' && (
+                <ScreenContainer
+                  key="recurring-screen"
+                  initial="initial"
+                  animate="animate"
+                  exit="exit"
+                  variants={pageVariants}
+                  transition={{ duration: 0.3 }}
+                >
+                  <RecurringPaymentsScreen 
+                    onBack={() => navigateTo('home')} 
+                    balance={localBalance}
+                    onSubmit={handleSendMoney}
                   />
                 </ScreenContainer>
               )}

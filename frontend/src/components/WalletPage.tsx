@@ -395,7 +395,7 @@ const WalletPage: React.FC = () => {
           <Balance>
             {isLoading 
               ? <FiRefreshCw size={24} style={{ animation: 'spin 1s linear infinite' }} /> 
-              : `${balance || '550.00'} XLM`
+              : `${balance || '0.00'} XLM`
             }
           </Balance>
           

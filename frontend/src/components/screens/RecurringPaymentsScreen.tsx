@@ -697,7 +697,7 @@ const RecurringPaymentsScreen: React.FC<RecurringPaymentsScreenProps> = ({
           formattedFrequency
         ).then(() => {
           toast.success('Confirmation SMS sent to recipient');
-        }).catch(error => {
+        }).catch((error: Error) => {
           console.error('Failed to send confirmation SMS:', error);
           // Don't block the payment creation even if SMS fails
         });

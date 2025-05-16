@@ -1,16 +1,28 @@
 {
   "compilerOptions": {
     "target": "es2020",
-    "module": "commonjs",
-    "lib": ["es2020"],
+    "module": "esnext",
+    "lib": ["es2020", "dom", "dom.iterable"],
     "outDir": "./dist",
-    "rootDir": "./src",
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
+    "jsx": "react-jsx",
+    "allowJs": true,
+    "noFallthroughCasesInSwitch": true,
+    "moduleResolution": "node",
+    "isolatedModules": true,
+    "allowSyntheticDefaultImports": true,
+    "noEmit": true
   },
   "include": ["src/**/*"],
-  "exclude": ["node_modules", "**/*.test.ts"]
+  "exclude": [
+    "node_modules", 
+    "**/*.test.ts",
+    "src/index.ts",
+    "src/routes.ts",
+    "src/controllers/**/*"
+  ]
 }

@@ -21,13 +21,15 @@ const VERIFY_PHONE_ENDPOINT = `${API_BASE_URL}/sms/verify-phone`;
  * @param pin The PIN needed to claim the funds
  * @param claimId The ID of the claimable balance
  * @param senderName Optional name of the sender
+ * @param memo Optional memo message to include
  */
 export const sendClaimLinkSMS = async (
   phoneNumber: string,
   amount: string,
   pin: string,
   claimId: string,
-  senderName?: string
+  senderName?: string,
+  memo?: string
 ): Promise<{success: boolean; error?: string; sid?: string}> => {
   // Log the SMS request details
   console.log('SMS Service: Sending claim link SMS...');
@@ -53,6 +55,7 @@ export const sendClaimLinkSMS = async (
         pin,
         claimId,
         senderName,
+        memo,
       }),
     });
     
@@ -133,6 +136,33 @@ export const sendStatusSMS = async (
 };
 
 /**
+ * Send a recurring payment confirmation SMS
+ * @param phoneNumber The recipient's phone number
+ * @param amount The recurring amount
+ * @param frequency The frequency of the payments
+ */
+export const sendRecurringPaymentConfirmation = async (
+  phoneNumber: string,
+  amount: string,
+  frequency: string
+): Promise<{success: boolean; error?: string}> => {
+  try {
+    // This is a mock implementation since the backend endpoint doesn't exist yet
+    console.log('Sending recurring payment confirmation to:', phoneNumber);
+    console.log('Amount:', amount, 'Frequency:', frequency);
+    
+    // Simulate a successful response
+    return { success: true };
+  } catch (error: any) {
+    console.error('Failed to send recurring payment confirmation:', error);
+    return { 
+      success: false, 
+      error: error.message || 'Unknown error sending confirmation'
+    };
+  }
+};
+
+/**
  * Validate a phone number via API
  * @param phoneNumber The phone number to validate
  */
@@ -177,17 +207,37 @@ export const verifyPhoneNumber = async (
  * @param phoneNumber The phone number to validate
  */
 export const validatePhoneNumber = (phoneNumber: string): boolean => {
-  // Remove all non-digit characters except + for validation
-  const cleaned = phoneNumber.replace(/[^0-9+]/g, '');
+  if (!phoneNumber) return false;
   
-  // Check for valid formats (simple validation)
-  if (cleaned.startsWith('+')) {
-    // International format (should be at least 10 digits plus +)
-    return cleaned.length >= 11;
-  } else {
-    // National format (should be at least 10 digits)
-    return cleaned.length >= 10;
-  }
+  // Pattern 1: Matches formats like +1-905-805-2755 exactly
+  const pattern1 = /^\+\d{1,3}-\d{3}-\d{3}-\d{4}$/;
+  
+  // Pattern 2: Standard North American formats with various separators
+  const pattern2 = /^(?:\+\d{1,3}[-\s]?)?(?:\(?\d{3}\)?[-\s]?)?\d{3}[-\s]?\d{4}$/;
+  
+  // Pattern 3: Broader international format
+  const pattern3 = /^\+\d{1,3}[\d\-\s()]{10,16}$/;
+  
+  // Pattern 4: Stripped format (digits only with optional + prefix)
+  const pattern4 = /^\+?\d{10,15}$/;
+  
+  // Log each pattern's result for debugging
+  const match1 = pattern1.test(phoneNumber);
+  const match2 = pattern2.test(phoneNumber);
+  const match3 = pattern3.test(phoneNumber);
+  const match4 = pattern4.test(phoneNumber);
+  
+  console.log(`Phone validation for ${phoneNumber}:`);
+  console.log(`- Pattern 1 (exact hyphenated): ${match1}`);
+  console.log(`- Pattern 2 (NA format): ${match2}`);
+  console.log(`- Pattern 3 (international): ${match3}`);
+  console.log(`- Pattern 4 (stripped format): ${match4}`);
+  
+  // Combined result - if any pattern matches, it's valid
+  const isValid = match1 || match2 || match3 || match4;
+  console.log(`- Final result: ${isValid}`);
+  
+  return isValid;
 };
 
 export default {

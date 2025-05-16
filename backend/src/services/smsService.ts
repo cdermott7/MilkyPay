@@ -1,5 +1,3 @@
-// @ts-ignore
-import * as twilio from 'twilio';
 import dotenv from 'dotenv';
 
 // Load environment variables
@@ -20,12 +18,13 @@ console.log('Account SID starts with AC:', accountSid?.startsWith('AC'));
 // Initialize Twilio client if credentials are available
 let twilioClient: any = null;
 try {
-  if (accountSid && authToken && accountSid.startsWith('AC')) {
-    // @ts-ignore
+  if (accountSid && authToken) {
+    // Import twilio dynamically to avoid issues
+    const twilio = require('twilio');
     twilioClient = twilio(accountSid, authToken);
     console.log('Twilio client initialized successfully');
   } else {
-    console.log('Twilio client not initialized due to missing credentials or invalid format');
+    console.log('Twilio client not initialized due to missing credentials');
   }
 } catch (error) {
   console.error('Failed to initialize Twilio client:', error);
@@ -68,6 +67,9 @@ export const formatPhoneNumber = (phoneNumber: string): string => {
 export const validatePhoneNumber = (phoneNumber: string): boolean => {
   // Remove all non-digit characters except + for validation
   const cleaned = phoneNumber.replace(/[^\d+]/g, '');
+  
+  // Log original and cleaned phone number for debugging
+  console.log(`Phone validation: Original "${phoneNumber}" → Cleaned "${cleaned}"`);
   
   // Simple validation: should start with + and be at least 10 digits
   if (cleaned.startsWith('+')) {
@@ -190,13 +192,15 @@ export const sendSMS = async (to: string, body: string): Promise<{success: boole
  * @param pin PIN for claiming
  * @param claimId Claimable balance ID
  * @param senderName Sender's name (optional)
+ * @param memo Memo message to include (optional)
  */
 export const sendClaimLinkSMS = async (
   phoneNumber: string,
   amount: string,
   pin: string,
   claimId: string,
-  senderName?: string
+  senderName?: string,
+  memo?: string
 ): Promise<{success: boolean; sid?: string; error?: string}> => {
   try {
     // Validate phone number
@@ -213,10 +217,18 @@ export const sendClaimLinkSMS = async (
     // Create the message
     let message: string;
     if (senderName) {
-      message = `${senderName} sent you ${formattedAmount} via MilkyPay! Use PIN: ${pin} to claim your funds at ${claimLink}`;
+      message = `${senderName} sent you ${formattedAmount} via MilkyPay!`;
     } else {
-      message = `You received ${formattedAmount} via MilkyPay! Use PIN: ${pin} to claim your funds at ${claimLink}`;
+      message = `You received ${formattedAmount} via MilkyPay!`;
     }
+    
+    // Add the memo if present
+    if (memo && memo.trim() !== '') {
+      message += ` Message: "${memo}"`;
+    }
+    
+    // Add the claim instructions
+    message += ` Use PIN: ${pin} to claim your funds at ${claimLink}`;
     
     // Send the SMS
     return await sendSMS(phoneNumber, message);

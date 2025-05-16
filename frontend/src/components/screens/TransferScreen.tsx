@@ -337,14 +337,14 @@ const TransferScreen: React.FC<TransferScreenProps> = ({ balance, onBack, onSubm
         const result = await onSubmit(recipient, amount, memo);
         
         // For phone transfers, send an SMS with claim link
-        if (selectedTab === 'phone' && result) {
+        if (selectedTab === 'phone' && result !== undefined) {
           try {
             console.log('Preparing to send SMS notification for phone transfer');
             console.log('Transaction result:', result);
             
             // Extract PIN from the transaction result or generate a new one
             // In a real implementation, PIN should come from the transaction
-            const pin = result.pin || Math.floor(1000 + Math.random() * 9000).toString();
+            const pin = (result as any).pin || Math.floor(1000 + Math.random() * 9000).toString();
             const claimId = `claim-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
             
             console.log('Sending SMS with:', {
@@ -362,7 +362,8 @@ const TransferScreen: React.FC<TransferScreenProps> = ({ balance, onBack, onSubm
               amount,
               pin,
               claimId,
-              "MilkyPay User" // Default sender name
+              "MilkyPay User", // Default sender name
+              memo // Include memo in SMS
             );
             
             console.log('SMS result:', smsResult);
@@ -370,12 +371,12 @@ const TransferScreen: React.FC<TransferScreenProps> = ({ balance, onBack, onSubm
             if (smsResult.success) {
               toast.success('SMS notification sent successfully!');
             } else {
-              toast.warning('Transaction successful, but SMS notification failed to send');
+              toast.error('Transaction successful, but SMS notification failed to send');
               console.error('SMS notification failed:', smsResult.error);
             }
           } catch (smsError) {
             console.error('Failed to send SMS notification:', smsError);
-            toast.warning('Transaction successful, but SMS notification failed to send');
+            toast.error('Transaction successful, but SMS notification failed to send');
           }
         }
         
@@ -407,7 +408,7 @@ const TransferScreen: React.FC<TransferScreenProps> = ({ balance, onBack, onSubm
           <form onSubmit={handleSubmit}>
             <BalanceInfo>
               <BalanceLabel>Available Balance</BalanceLabel>
-              <BalanceValue>{numericBalance.toFixed(2)} XLM</BalanceValue>
+              <BalanceValue>{numericBalance.toFixed(7)} XLM (≈ ${(numericBalance * 0.15).toFixed(2)} USD)</BalanceValue>
             </BalanceInfo>
             
             <SegmentedControl>

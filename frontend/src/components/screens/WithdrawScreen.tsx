@@ -1,8 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import { FiArrowLeft, FiAlertCircle, FiDollarSign, FiSend } from 'react-icons/fi';
+import { FiArrowLeft, FiAlertCircle, FiDollarSign, FiSend, FiCreditCard, FiSmartphone, FiMapPin } from 'react-icons/fi';
 import theme from '../../styles/theme';
+import OffRampOptions from '../OffRampOptions';
 
 interface WithdrawScreenProps {
   balance: string;
@@ -229,7 +230,44 @@ const itemVariants = {
 const WithdrawScreen: React.FC<WithdrawScreenProps> = ({ balance, onBack, onSubmit }) => {
   const [address, setAddress] = useState('');
   const [amount, setAmount] = useState('');
+  const [showOffRamp, setShowOffRamp] = useState(false);
+  const [isTemporaryWallet, setIsTemporaryWallet] = useState(false);
   const numericBalance = parseFloat(balance) || 0;
+  
+  // Check if we're in temporary wallet mode (from URL params or localStorage)
+  // Temp wallets only appear after claiming funds and are used for off-ramping
+  useEffect(() => {
+    // Check URL params
+    const params = new URLSearchParams(window.location.search);
+    const isTemp = params.get('temp') === 'true';
+    const tempAmount = params.get('amount');
+    const directOfframp = params.get('direct_offramp') === 'true';
+    
+    // Or check localStorage
+    const tempWalletData = localStorage.getItem('temp_wallet');
+    const tempWallet = tempWalletData ? JSON.parse(tempWalletData) : null;
+    
+    if (isTemp || tempWallet?.isTemporary) {
+      setIsTemporaryWallet(true);
+      console.log("TEMPORARY WALLET MODE ENABLED");
+      
+      // Set initial amount if provided in URL or in tempWallet
+      if (tempAmount) {
+        setAmount(tempAmount);
+      } else if (tempWallet?.balance) {
+        setAmount(tempWallet.balance);
+      }
+      
+      // If direct_offramp flag is set, show the off-ramp interface immediately
+      // This is for the temporary wallet flow after claiming funds
+      if (directOfframp) {
+        setShowOffRamp(true);
+        console.log("Direct off-ramp mode enabled");
+      }
+    } else {
+      console.log("Regular wallet mode");
+    }
+  }, []);
   
   // Check if form is valid
   const isFormValid = () => {
@@ -241,9 +279,15 @@ const WithdrawScreen: React.FC<WithdrawScreenProps> = ({ balance, onBack, onSubm
   
   // Handle max amount
   const setMaxAmount = () => {
-    // Leave a small amount for transaction fees
-    const maxAmount = Math.max(0, numericBalance - 0.1).toFixed(2);
-    setAmount(maxAmount);
+    // If it's a temporary wallet, use the full amount
+    // Otherwise, leave a small amount for transaction fees
+    if (isTemporaryWallet) {
+      setAmount(numericBalance.toFixed(2));
+    } else {
+      // Leave a small amount for transaction fees
+      const maxAmount = Math.max(0, numericBalance - 0.1).toFixed(2);
+      setAmount(maxAmount);
+    }
   };
   
   // Handle form submission
@@ -251,7 +295,54 @@ const WithdrawScreen: React.FC<WithdrawScreenProps> = ({ balance, onBack, onSubm
     e.preventDefault();
     if (isFormValid()) {
       onSubmit(address, amount);
+      
+      // If this is a temporary wallet, clear the data after submission
+      if (isTemporaryWallet) {
+        // Small delay to allow the animation and updates to process
+        setTimeout(() => {
+          localStorage.removeItem('temp_wallet');
+          // Go to home after successful withdrawal from temp wallet
+          window.location.href = '/';
+        }, 2000);
+      }
     }
+  };
+  
+  // Handle showing offramp options vs. traditional withdraw
+  const toggleView = () => {
+    setShowOffRamp(!showOffRamp);
+  };
+  
+  // Handle offramp withdraw
+  const handleOfframpWithdraw = (amount: string, method: string, details: any) => {
+    // Mock implementation that will simulate a withdrawal
+    console.log(`Offramp withdraw: ${amount} via ${method}`, details);
+    
+    // Update the balance by simulating a withdrawal
+    setTimeout(() => {
+      // For regular wallets, update the balance
+      if (!isTemporaryWallet) {
+        onSubmit(details.accountNumber || details.phoneNumber || 'off-ramp-destination', amount);
+      } else {
+        // For temporary wallets, clear the temp wallet data after withdrawal
+        console.log("Clearing temporary wallet data after successful withdrawal");
+        localStorage.removeItem('temp_wallet');
+      }
+    }, 1000);
+    
+    // Create mock withdrawal result
+    const withdrawalId = `WD${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
+    console.log(`Generated withdrawal ID: ${withdrawalId} for ${isTemporaryWallet ? 'temporary' : 'regular'} wallet`);
+    
+    return Promise.resolve({
+      success: true,
+      amount,
+      fee: (parseFloat(amount) * 0.02).toFixed(2),
+      destination: details.accountNumber || details.phoneNumber || 'your account',
+      referenceCode: withdrawalId,
+      estimatedTime: '1-2 business days',
+      isTemporaryWallet: isTemporaryWallet
+    });
   };
   
   return (
@@ -263,69 +354,114 @@ const WithdrawScreen: React.FC<WithdrawScreenProps> = ({ balance, onBack, onSubm
         <Title>Withdraw Funds</Title>
       </Header>
       
-      <motion.div
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-      >
-        <Card variants={itemVariants}>
-          <form onSubmit={handleSubmit}>
-            <BalanceInfo>
-              <BalanceLabel>Available Balance</BalanceLabel>
-              <BalanceValue>{numericBalance.toFixed(2)} XLM</BalanceValue>
-            </BalanceInfo>
+      {showOffRamp || isTemporaryWallet ? (
+        <OffRampOptions 
+          balance={isTemporaryWallet ? amount : balance} 
+          walletAddress={address}
+          isTemporaryWallet={isTemporaryWallet}
+          onWithdraw={handleOfframpWithdraw}
+          onSuccess={() => {
+            // After successful withdrawal, clear temp wallet and navigate back
+            if (isTemporaryWallet) {
+              localStorage.removeItem('temp_wallet');
+              setTimeout(() => {
+                window.location.href = '/';
+              }, 5000);
+            } else {
+              setTimeout(() => {
+                onBack();
+              }, 5000);
+            }
+          }}
+        />
+      ) : (
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
+          <Card variants={itemVariants}>
+            {!isTemporaryWallet && (
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
+                <div style={{ fontWeight: 'bold' }}>Method:</div>
+                <div>
+                  <button 
+                    onClick={toggleView}
+                    style={{
+                      background: 'linear-gradient(135deg, #7C3AED, #4C1D95)',
+                      border: 'none',
+                      borderRadius: '8px',
+                      padding: '8px 16px',
+                      color: 'white',
+                      cursor: 'pointer',
+                      fontSize: '14px'
+                    }}
+                  >
+                    Try Fiat Off-Ramp Options →
+                  </button>
+                </div>
+              </div>
+            )}
             
-            <FormGroup>
-              <Label htmlFor="recipient-address">Recipient Address</Label>
-              <Input 
-                id="recipient-address"
-                type="text" 
-                placeholder="G..." 
-                value={address}
-                onChange={(e) => setAddress(e.target.value)}
-              />
-            </FormGroup>
-            
-            <FormGroup>
-              <Label htmlFor="amount">Amount</Label>
-              <InputGroup>
-                <AmountPrefix>
-                  <FiDollarSign />
-                </AmountPrefix>
-                <AmountInput 
-                  id="amount"
-                  type="number" 
-                  step="0.01" 
-                  min="0" 
-                  max={numericBalance}
-                  placeholder="0.00" 
-                  value={amount}
-                  onChange={(e) => setAmount(e.target.value)}
+
+            <form onSubmit={handleSubmit}>
+              <BalanceInfo>
+                <BalanceLabel>Available Balance</BalanceLabel>
+                <BalanceValue>{numericBalance.toFixed(7)} XLM (≈ ${(numericBalance * 0.15).toFixed(2)} USD)</BalanceValue>
+              </BalanceInfo>
+              
+              <FormGroup>
+                <Label htmlFor="recipient-address">Recipient Address</Label>
+                <Input 
+                  id="recipient-address"
+                  type="text" 
+                  placeholder="G..." 
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
                 />
-                <MaxButton type="button" onClick={setMaxAmount}>MAX</MaxButton>
-              </InputGroup>
-            </FormGroup>
-            
-            <SubmitButton 
-              type="submit" 
-              disabled={!isFormValid()}
-              whileHover={{ scale: isFormValid() ? 1.03 : 1 }}
-              whileTap={{ scale: isFormValid() ? 0.98 : 1 }}
-              transition={{ type: "spring", stiffness: 400, damping: 10 }}
-            >
-              <FiSend size={18} />
-              Withdraw Funds
-            </SubmitButton>
-            
-            <WarningBanner>
-              <WarningIcon><FiAlertCircle size={18} /></WarningIcon>
-              <WarningText>
-                Always double-check the recipient address before submitting. Transactions on the Stellar network cannot be reversed once confirmed.
-              </WarningText>
-            </WarningBanner>
-          </form>
-        </Card>
-      </motion.div>
+              </FormGroup>
+              
+              <FormGroup>
+                <Label htmlFor="amount">Amount</Label>
+                <InputGroup>
+                  <AmountPrefix>
+                    <FiDollarSign />
+                  </AmountPrefix>
+                  <AmountInput 
+                    id="amount"
+                    type="number" 
+                    step="0.01" 
+                    min="0" 
+                    max={numericBalance}
+                    placeholder="0.00" 
+                    value={amount}
+                    onChange={(e) => setAmount(e.target.value)}
+                  />
+                  <MaxButton type="button" onClick={setMaxAmount}>MAX</MaxButton>
+                </InputGroup>
+              </FormGroup>
+              
+              <SubmitButton 
+                type="submit" 
+                disabled={!isFormValid()}
+                whileHover={{ scale: isFormValid() ? 1.03 : 1 }}
+                whileTap={{ scale: isFormValid() ? 0.98 : 1 }}
+                transition={{ type: "spring", stiffness: 400, damping: 10 }}
+              >
+                <FiSend size={18} />
+                {isTemporaryWallet ? 'Withdraw Claimed Funds' : 'Withdraw Funds'}
+              </SubmitButton>
+              
+              <WarningBanner>
+                <WarningIcon><FiAlertCircle size={18} /></WarningIcon>
+                <WarningText>
+                  Always double-check the recipient address before submitting. Transactions on the Stellar network cannot be reversed once confirmed.
+                </WarningText>
+              </WarningBanner>
+            </form>
+          </Card>
+        </motion.div>
+      )}
     </Container>
   );
 };

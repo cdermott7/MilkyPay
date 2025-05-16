@@ -9,7 +9,7 @@ export const sendClaimLink = async (req: Request, res: Response) => {
   console.log('Request body:', req.body);
   
   try {
-    const { phoneNumber, amount, pin, claimId, senderName } = req.body;
+    const { phoneNumber, amount, pin, claimId, senderName, memo } = req.body;
     
     console.log('SMS Controller: Extracted data:');
     console.log('- Phone:', phoneNumber);
@@ -17,6 +17,7 @@ export const sendClaimLink = async (req: Request, res: Response) => {
     console.log('- PIN:', pin);
     console.log('- Claim ID:', claimId);
     console.log('- Sender:', senderName || 'Not provided');
+    console.log('- Memo:', memo || 'Not provided');
     
     if (!phoneNumber || !amount || !pin || !claimId) {
       console.log('SMS Controller: Missing required fields');
@@ -43,7 +44,8 @@ export const sendClaimLink = async (req: Request, res: Response) => {
       amount,
       pin,
       claimId,
-      senderName
+      senderName,
+      memo
     );
     
     console.log('SMS Controller: Result from sendClaimLinkSMS:', result);

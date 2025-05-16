@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import styled from 'styled-components';
+import StellarLogo from '../../assets/images/StellarLogo.png';
 
 interface RocketAnimationProps {
   isVisible: boolean;
@@ -172,7 +173,7 @@ const ImprovedRocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, is
     if (isVisible) {
       const timer = setTimeout(() => {
         onComplete();
-      }, isSuccess ? 6000 : 6500);
+      }, isSuccess ? 1500 : 2000); // Reduced animation time to 1.5-2 seconds
       
       return () => clearTimeout(timer);
     }
@@ -275,7 +276,7 @@ const ImprovedRocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, is
                   transition={{ 
                     duration: 5,
                     times: [0, 0.2, 0.3, 0.4, 0.5, 0.7, 1],
-                    ease: ["easeOut", "easeIn", "easeOut", "easeIn", "easeOut", "easeIn"]
+                    ease: [[0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1]]
                   }}
                 >
                   <RocketSVG viewBox="0 0 100 240" xmlns="http://www.w3.org/2000/svg">
@@ -310,7 +311,7 @@ const ImprovedRocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, is
                   transition={{ 
                     duration: 5,
                     times: [0, 0.2, 0.3, 0.4, 0.5, 0.7, 1],
-                    ease: ["easeOut", "easeIn", "easeOut", "easeIn", "easeOut", "easeIn"]
+                    ease: [[0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1]]
                   }}
                   style={{ x: -15 }}
                 />

@@ -126,7 +126,7 @@ const RocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, isSuccess,
     if (isVisible) {
       const timer = setTimeout(() => {
         onComplete();
-      }, isSuccess ? 5000 : 5500);
+      }, isSuccess ? 1200 : 1800); // Reduced to ~1-2 seconds
       
       return () => clearTimeout(timer);
     }
@@ -243,7 +243,7 @@ const RocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, isSuccess,
                   transition={{ 
                     duration: 4,
                     times: [0, 0.3, 0.4, 0.5, 0.6, 0.8, 1],
-                    ease: ["easeOut", "easeIn", "easeOut", "easeIn", "easeOut", "easeIn"]
+                    ease: [[0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1]]
                   }}
                 >
                   <FaRocket />
@@ -258,7 +258,7 @@ const RocketAnimation: React.FC<RocketAnimationProps> = ({ isVisible, isSuccess,
                   transition={{ 
                     duration: 4,
                     times: [0, 0.3, 0.4, 0.5, 0.6, 0.8, 1],
-                    ease: ["easeOut", "easeIn", "easeOut", "easeIn", "easeOut", "easeIn"]
+                    ease: [[0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1], [0.4, 0.0, 0.2, 1], [0.4, 0.0, 1.0, 1]]
                   }}
                 />
                 
