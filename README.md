@@ -60,99 +60,99 @@ MilkyPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool th
 ## Screenshots
 
 ### Home Screen – Dark Mode  
-![MilkyPay Base Dark Mode](./assets/screenshots/MilkyPayBaseDarkMode.png)  
+![MilkyPay Base Dark Mode](./assets/images/MilkyPayBaseDarkMode.png)  
 *Dark-mode dashboard showing USD, XLM, and FTN balances with quick-action buttons for Deposit, Purchase, Transfer, and Withdraw.*
 
 ### Home Screen Variant – Dark Mode  
-![MilkyPay Base Dark Mode 2](./assets/screenshots/MilkyPayBaseDarkMode2.png)  
+![MilkyPay Base Dark Mode 2](./assets/images/MilkyPayBaseDarkMode2.png)  
 *Alternate dark-mode dashboard view highlighting expanded wallet details and recent transactions.*
 
 ### Home Screen – Light Mode  
-![MilkyPay Base Light Mode](./assets/screenshots/MilkyPayBaseLightmode.png)  
+![MilkyPay Base Light Mode](./assets/images/MilkyPayBaseLightmode.png)  
 *Light-mode dashboard displaying USD, XLM, and FTN balances with the same quick-action buttons.*
 
 ### Claim Funds Interface  
-![MilkyPay Claim Funds Screen](./assets/screenshots/MilkyPayClaimFundsScreen.png)  
+![MilkyPay Claim Funds Screen](./assets/images/MilkyPayClaimFundsScreen.png)  
 *Secure claim screen where recipients enter a PIN to verify and claim funds sent via link.*
 
 ### Deposit Flow – Light Mode  
-![MilkyPay Deposit Light Mode](./assets/screenshots/MilkyPayDepositLightMode.png)  
+![MilkyPay Deposit Light Mode](./assets/images/MilkyPayDepositLightMode.png)  
 *Light-mode deposit interface prompting users to select an asset and enter the amount.*
 
 ### Deposit Confirmation – Light Mode  
-![MilkyPay Deposit Light Mode 2](./assets/screenshots/MilkyPayDepositLightMode2.png)  
-*Light-mode deposit confirmation showing amount, network fees, and Confirm button.*
+![MilkyPay Deposit Light Mode 2](./assets/images/MilkyPayDepositLightMode2.png)  
+*Light-mode deposit confirmation showing amount, network fees, and a Confirm button.*
 
 ### Loading Animation  
-![MilkyPay Load Animation Screen](./assets/screenshots/MilkyPayLoadAnimationScreen.png)  
+![MilkyPay Load Animation Screen](./assets/images/MilkyPayLoadAnimationScreen.png)  
 *Animated loader displayed while transactions or data are being processed.*
 
 ### Off-Ramp Flow  
-![MilkyPay Offramp Screen](./assets/screenshots/MilkyPayOfframpScreen.png)  
+![MilkyPay Offramp Screen](./assets/images/MilkyPayOfframpScreen.png)  
 *Interface for converting crypto to fiat, showing available rails and fees.*
 
 ### Profile – Dark Mode  
-![MilkyPay Profile Dark Mode](./assets/screenshots/MilkyPayProfileDarkMode.png)  
+![MilkyPay Profile Dark Mode](./assets/images/MilkyPayProfileDarkMode.png)  
 *Dark-mode profile screen with user info, theme toggle, and wallet backup options.*
 
 ### Profile – Light Mode  
-![MilkyPay Profile Light Mode](./assets/screenshots/MilkyPayProfileLightMode.png)  
+![MilkyPay Profile Light Mode](./assets/images/MilkyPayProfileLightMode.png)  
 *Light-mode profile interface displaying user settings and security features.*
 
 ### Purchase Flow – Dark Mode  
-![MilkyPay Purchase Dark Mode](./assets/screenshots/MilkyPayPurchaseDarkMode.png)  
+![MilkyPay Purchase Dark Mode](./assets/images/MilkyPayPurchaseDarkMode.png)  
 *Dark-mode purchase screen allowing users to buy FTN or XLM with real-time rate quotes.*
 
 ### Purchase Flow – Light Mode  
-![MilkyPay Purchase Light Mode](./assets/screenshots/MilkyPayPurchaseLightMode.png)  
+![MilkyPay Purchase Light Mode](./assets/images/MilkyPayPurchaseLightMode.png)  
 *Light-mode purchase interface with input fields for amount, currency selector, and order summary.*
 
 ### Recurring Payments – Dark Mode  
-![MilkyPay Recurring Payment Dark Mode](./assets/screenshots/MilkyPayRecurringPaymentDarkMode.png)  
+![MilkyPay Recurring Payment Dark Mode](./assets/images/MilkyPayRecurringPaymentDarkMode.png)  
 *Dark-mode view for scheduling and managing recurring payments or subscriptions.*
 
 ### Recurring Payments – Light Mode  
-![MilkyPay Recurring Payment Light Mode](./assets/screenshots/MilkyPayRecurringPaymentLightMode.png)  
+![MilkyPay Recurring Payment Light Mode](./assets/images/MilkyPayRecurringPaymentLightMode.png)  
 *Light-mode interface for setting up automated, recurring transfers.*
 
-### SMS Example  
-![MilkyPay SMS Example](./assets/screenshots/MilkyPaySMSExample.png)  
-*Illustration of SMS notification sent to a recipient with a secure claim link.*
+### SMS Notification Example  
+![MilkyPay SMS Example](./assets/images/MilkyPaySMSExample.png)  
+*Illustration of an SMS notification sent to a recipient with a secure claim link.*
 
 ### Settings – Dark Mode  
-![MilkyPay Settings Dark Mode](./assets/screenshots/MilkyPaySettingsDarkMode.png)  
+![MilkyPay Settings Dark Mode](./assets/images/MilkyPaySettingsDarkMode.png)  
 *Dark-mode settings screen with privacy, security, and notification preferences.*
 
 ### Settings – Light Mode  
-![MilkyPay Settings Light Mode](./assets/screenshots/MilkyPaySettingsLightMode.png)  
+![MilkyPay Settings Light Mode](./assets/images/MilkyPaySettingsLightMode.png)  
 *Light-mode settings interface showing configurable options and toggles.*
 
 ### Transaction Animation  
-![MilkyPay Transaction Animation](./assets/screenshots/MilkyPayTransactionAnimation.png)  
+![MilkyPay Transaction Animation](./assets/images/MilkyPayTransactionAnimation.png)  
 *Visual feedback animation displayed when a transaction is successfully sent.*
 
 ### Transaction History – Dark Mode  
-![MilkyPay Transaction History Dark Mode](./assets/screenshots/MilkyPayTransactionHistoryDarkMode.png)  
+![MilkyPay Transaction History Dark Mode](./assets/images/MilkyPayTransactionHistoryDarkMode.png)  
 *Dark-mode history view listing past payments, claims, and memos with timestamps.*
 
 ### Transaction History – Light Mode  
-![MilkyPay Transaction History Light Mode](./assets/screenshots/MilkyPayTransactionHistoryLightMode.png)  
+![MilkyPay Transaction History Light Mode](./assets/images/MilkyPayTransactionHistoryLightMode.png)  
 *Light-mode transaction log showing detailed history of all account activity.*
 
 ### Transfer Flow – Dark Mode  
-![MilkyPay Transfer Dark Mode](./assets/screenshots/MilkyPayTransferDarkMode.png)  
+![MilkyPay Transfer Dark Mode](./assets/images/MilkyPayTransferDarkMode.png)  
 *Dark-mode send-money flow with recipient entry, amount input, and optional memo.*
 
 ### Transfer Flow – Light Mode  
-![MilkyPay Transfer Light Mode](./assets/screenshots/MilkyPayTransferLightMode.png)  
+![MilkyPay Transfer Light Mode](./assets/images/MilkyPayTransferLightMode.png)  
 *Light-mode transfer interface featuring contact picker, amount field, and memo.*
 
 ### Withdraw Flow – Dark Mode  
-![MilkyPay Withdraw Dark Mode](./assets/screenshots/MilkyPayWithdrawDarkMode.png)  
+![MilkyPay Withdraw Dark Mode](./assets/images/MilkyPayWithdrawDarkMode.png)  
 *Dark-mode withdrawal screen for moving funds out, showing destination network and fees.*
 
 ### Withdraw Flow – Light Mode  
-![MilkyPay Withdraw Light Mode](./assets/screenshots/MilkyPayWithdrawLightMode.png)  
+![MilkyPay Withdraw Light Mode](./assets/images/MilkyPayWithdrawLightMode.png)  
 *Light-mode withdraw interface with destination address, amount input, and Confirm button.*
 
 
