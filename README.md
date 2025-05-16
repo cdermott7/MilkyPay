@@ -1,17 +1,17 @@
 <div align="center">
-  <img src="./assets/images/StellarLogo.png" alt="BridgeBotPay Logo" width="400"/>
-  <h1>BridgeBotPay: Voice-Enabled Cross-Border Remittance on Stellar Network</h1>
+  <img src="./assets/images/StellarLogo.png" alt="MilkyPay Logo" width="400"/>
+  <h1>MilkyPay: Voice-Enabled Cross-Border Remittance on Stellar Network</h1>
   <p><i>A self-custodial, voice-driven payment solution that enables frictionless global money transfers with a simple link + PIN approach</i></p>
 </div>
 
 <div align="center">
-  <h4>Created by Cole Dermott</h4>
-  <p><b>Team:</b> BridgeBotPay • <b>Contact:</b> <a href="mailto:cole@bridgebotpay.com">cole@bridgebotpay.com</a></p>
+  <h4>Created by Cole Dermott and Tolga Cohce</h4>
+  <p><b>Team:</b> MilkyPay • <b>Contact:</b> <a href="mailto:dermottcole@gmail.com">dermottcole@gmail.com</a></p>
 </div>
 
 ## Overview
 
-BridgeBotPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool that mimics an e‑transfer. Users generate a wallet, load funds, and send money across borders via a simple **link + PIN** flow. A built‑in AI assistant handles voice commands for sending, claiming, off‑ramping, and refunds—all powered by Stellar's low‑fee network and local fiat anchors.
+MilkyPay is a **voice-enabled**, **self‑custodial** Stellar remittance tool that mimics an e‑transfer. Users generate a wallet, load funds, and send money across borders via a simple **link + PIN** flow. A built‑in AI assistant handles voice commands for sending, claiming, off‑ramping, and refunds—all powered by Stellar's low‑fee network and local fiat anchors.
 
 ## Table of Contents
 
@@ -20,7 +20,7 @@ BridgeBotPay is a **voice-enabled**, **self‑custodial** Stellar remittance too
 - [Screenshots](#screenshots)
 - [Technical Architecture](#technical-architecture)
 - [Repository Structure](#repository-structure)
-- [BridgeBotPay in Action](#bridgebotpay-in-action)
+- [MilkyPay in Action](#MilkyPay-in-action)
 - [Stellar Integration](#stellar-integration)
 - [Multi-Chain Support](#multi-chain-support)
 - [Voice-First Approach](#voice-first-approach)
@@ -30,11 +30,11 @@ BridgeBotPay is a **voice-enabled**, **self‑custodial** Stellar remittance too
 
 ## Demo Video
 
-[![BridgeBotPay Demo Video](https://img.youtube.com/vi/PLACEHOLDER_VIDEO_ID/0.jpg)](https://youtu.be/PLACEHOLDER_VIDEO_ID)
+[![MilkyPay Demo Video](https://img.youtube.com/vi/PLACEHOLDER_VIDEO_ID/0.jpg)](https://youtu.be/PLACEHOLDER_VIDEO_ID)
 
-*Click the image above to watch the full demo of BridgeBotPay in action.*
+*Click the image above to watch the full demo of MilkyPay in action.*
 
-> This comprehensive demo showcases how BridgeBotPay leverages Stellar's features for secure cross-border payments with voice commands, link sharing, and PIN authentication.
+> This comprehensive demo showcases how MilkyPay leverages Stellar's features for secure cross-border payments with voice commands, link sharing, and PIN authentication.
 
 ## Key Features
 
@@ -48,11 +48,11 @@ BridgeBotPay is a **voice-enabled**, **self‑custodial** Stellar remittance too
 ## Screenshots
 
 ### Home Screen & Wallet
-![BridgeBotPay Home Screen](./assets/screenshots/home_screen.png)
+![MilkyPay Home Screen](./assets/screenshots/home_screen.png)
 *The main dashboard showing available balance in USD, XLM, and FTN with quick action buttons*
 
 ### Voice AI Assistant
-![BridgeBotPay Voice Assistant](./assets/screenshots/voice_assistant.png)
+![MilkyPay Voice Assistant](./assets/screenshots/voice_assistant.png)
 *The AI assistant interface, showing a transcription of voice commands and responses*
 
 ### Send Money Flow
@@ -73,7 +73,7 @@ BridgeBotPay is a **voice-enabled**, **self‑custodial** Stellar remittance too
 
 ## Technical Architecture
 
-BridgeBotPay combines several technologies to create a seamless, user-friendly payment experience:
+MilkyPay combines several technologies to create a seamless, user-friendly payment experience:
 
 ### Core Components
 
@@ -107,7 +107,7 @@ BridgeBotPay combines several technologies to create a seamless, user-friendly p
 ## Repository Structure
 
 ```
-bridgebotpay-hackathon/
+MilkyPay-hackathon/
 ├─ README.md
 ├─ .env                # Environment variables (no secrets checked in)
 ├─ frontend/           # React PWA + Voice Chat UI
@@ -146,9 +146,9 @@ bridgebotpay-hackathon/
       └─ src/lib.rs    # Rust-based escrow contract
 ```
 
-## BridgeBotPay in Action
+## MilkyPay in Action
 
-BridgeBotPay simplifies cross-border payments through a frictionless flow:
+MilkyPay simplifies cross-border payments through a frictionless flow:
 
 1. **Wallet Creation**: Users get an instant self-custodial wallet with one click
 2. **Deposit**: Users can fund their wallet through various on-ramp options
@@ -168,7 +168,7 @@ BridgeBotPay simplifies cross-border payments through a frictionless flow:
 
 ## Stellar Integration
 
-BridgeBotPay demonstrates the power of Stellar's unique features:
+MilkyPay demonstrates the power of Stellar's unique features:
 
 ### 1. Claimable Balances
 
@@ -224,7 +224,7 @@ This enables seamless on/off-ramping to local currencies worldwide.
 
 ## Multi-Chain Support
 
-BridgeBotPay demonstrates cross-chain capabilities by integrating both:
+MilkyPay demonstrates cross-chain capabilities by integrating both:
 
 1. **Stellar (XLM)**: Primary currency for all transactions
 2. **Bahamut Network (FTN)**: Secondary support for FastToken
@@ -247,7 +247,7 @@ This approach demonstrates the power of multi-chain integration while maintainin
 
 ## Voice-First Approach
 
-BridgeBotPay's voice interface uses Web Speech API with a custom NLU engine:
+MilkyPay's voice interface uses Web Speech API with a custom NLU engine:
 
 ```typescript
 // Extract the phone number with improved regex
@@ -278,8 +278,8 @@ The NLU system can:
 
 1. Clone the repository
 ```bash
-git clone https://github.com/your-username/bridgebotpay.git
-cd bridgebotpay
+git clone https://github.com/your-username/MilkyPay.git
+cd MilkyPay
 ```
 
 2. Install dependencies
@@ -312,23 +312,23 @@ Voice-enabled, self-custodial Stellar remittance tool with link+PIN claiming sys
 
 ### Full Description
 
-BridgeBotPay addresses several key challenges in the global remittance space:
+MilkyPay addresses several key challenges in the global remittance space:
 
 #### Problems Solved
 
-1. **Complex User Experience**: Traditional remittance services and crypto wallets have steep learning curves. BridgeBotPay's voice interface allows users to simply speak what they want to do, eliminating navigation complexity.
+1. **Complex User Experience**: Traditional remittance services and crypto wallets have steep learning curves. MilkyPay's voice interface allows users to simply speak what they want to do, eliminating navigation complexity.
 
-2. **Recipient Wallet Requirements**: Most crypto payment solutions require recipients to have wallets. BridgeBotPay's link + PIN system allows anyone with a phone to receive funds without installing software or creating accounts.
+2. **Recipient Wallet Requirements**: Most crypto payment solutions require recipients to have wallets. MilkyPay's link + PIN system allows anyone with a phone to receive funds without installing software or creating accounts.
 
 3. **High Fees**: Traditional remittance services charge 5-7% on average. Stellar's negligible fees (< $0.0001 per transaction) make micro-remittances economically viable.
 
-4. **Slow Settlement**: Bank transfers can take days for international settlements. BridgeBotPay leverages Stellar's 3-5 second confirmation time for near-instant transfers.
+4. **Slow Settlement**: Bank transfers can take days for international settlements. MilkyPay leverages Stellar's 3-5 second confirmation time for near-instant transfers.
 
-5. **Currency Conversion Complexity**: Managing exchange rates is typically a user burden. BridgeBotPay handles this behind the scenes, showing equivalent values in USD, XLM, and FTN.
+5. **Currency Conversion Complexity**: Managing exchange rates is typically a user burden. MilkyPay handles this behind the scenes, showing equivalent values in USD, XLM, and FTN.
 
 #### How Stellar Technology Was Used
 
-BridgeBotPay leverages several key Stellar features:
+MilkyPay leverages several key Stellar features:
 
 1. **Claimable Balances**: The core link + PIN system uses Stellar's native Claimable Balances feature, which allows funds to be set aside for specific claimants with custom conditions. We use the memo field to securely associate PINs with claims.
 
@@ -378,7 +378,7 @@ BridgeBotPay leverages several key Stellar features:
 
 5. **Asset Interoperability**: Stellar's multi-asset support facilitates straightforward integration with both native XLM and FastToken (FTN), demonstrating cross-chain capabilities.
 
-This combination of features makes BridgeBotPay uniquely positioned in the remittance space - offering a voice-first, user-friendly interface that abstracts away blockchain complexity while leveraging Stellar's speed, low fees, and global reach.
+This combination of features makes MilkyPay uniquely positioned in the remittance space - offering a voice-first, user-friendly interface that abstracts away blockchain complexity while leveraging Stellar's speed, low fees, and global reach.
 
 ### Canva Slides Presentation
 - [Presentation Slides](https://www.canva.com/design/PLACEHOLDER_CANVA_ID/view)
